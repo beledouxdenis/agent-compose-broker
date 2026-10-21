@@ -43,6 +43,7 @@ Enable the rootless Podman API socket and pass it to the broker:
 ```sh
 systemctl --user enable --now podman.socket
 export PODMAN_SOCKET="$XDG_RUNTIME_DIR/podman/podman.sock"
+export DOCKER_SOCKET=/var/run/docker.sock
 podman-compose run --rm codex
 ```
 
@@ -50,7 +51,7 @@ podman-compose run --rm codex
 
 ```sh
 export DOCKER_SOCKET=/var/run/docker.sock
-docker compose run --rm codex
+BROKER_GROUP_ADD=0 docker compose run --rm codex
 ```
 
 ### macOS with Podman Machine
