@@ -15,7 +15,7 @@ services:
       - ${PODMAN_SOCKET:-./broker/unavailable.sock}:/run/engines/podman.sock:ro
       - ${PODMAN_SSHKEY:-./broker/unavailable.key}:/root/.ssh/podman-machine:ro
       - ${DOCKER_SOCKET:-./broker/unavailable.sock}:/run/engines/docker.sock:ro
-      - ./services/compose.yml:/services/compose.yml:ro
+      - ./services:/services:ro
       - broker-socket:/broker
 
   codex:

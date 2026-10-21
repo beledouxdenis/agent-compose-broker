@@ -21,7 +21,9 @@ through the same engine.
 ```text
 codex/                 Codex image and restricted Docker/Podman clients
 broker/                Broker server, client and tests
-services/compose.yml   Protected list of services available to the agent
+services/              Untracked local service catalog and its files
+services/compose.example.yml
+                       Tracked example service catalog
 compose.yml            User-facing stack which starts Codex and the broker
 ```
 
@@ -29,6 +31,15 @@ The two Compose files are intentionally separate. Neither `compose.yml` nor
 `services/compose.yml` is mounted into the Codex container. In a consuming
 project, only the source directories that Codex is expected to edit should be
 mounted there.
+
+Create the local service catalog before starting the broker:
+
+```sh
+cp services/compose.example.yml services/compose.yml
+```
+
+The contents of `services/`, except for `compose.example.yml`, are ignored by
+Git so local services, build contexts and project data are not committed.
 
 ## Run
 
