@@ -1,0 +1,4 @@
+services:
+  example:
+    image: docker.io/library/alpine:latest
+    command: ["echo", "Hello from an approved service"]

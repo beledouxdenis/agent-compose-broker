@@ -1,0 +1,14 @@
+FROM python:3.13-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends docker-cli docker-compose podman-remote \
+ && ln -s /usr/bin/podman-remote /usr/local/bin/podman \
+ && pip install --no-cache-dir podman-compose PyYAML \
+ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /opt/agent-compose-broker
+COPY broker/broker.py ./
+
+CMD ["python3", "/opt/agent-compose-broker/broker.py"]

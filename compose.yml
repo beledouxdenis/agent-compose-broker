@@ -1,0 +1,57 @@
+services:
+  broker:
+    build:
+      context: .
+      dockerfile: broker/Containerfile
+    image: localhost/agent-compose-broker
+    environment:
+      COMPOSE_BROKER_FILE: /services/compose.yml
+      COMPOSE_BROKER_PODMAN_HOST: ${PODMAN_BROKER_HOST:-unix:///run/engines/podman.sock}
+      COMPOSE_BROKER_DOCKER_HOST: unix:///run/engines/docker.sock
+      CONTAINER_SSHKEY: /root/.ssh/podman-machine
+    volumes:
+      - ${PODMAN_SOCKET:-./broker/unavailable.sock}:/run/engines/podman.sock:ro
+      - ${PODMAN_SSHKEY:-./broker/unavailable.key}:/root/.ssh/podman-machine:ro
+      - ${DOCKER_SOCKET:-./broker/unavailable.sock}:/run/engines/docker.sock:ro
+      - ./services/compose.yml:/services/compose.yml:ro
+      - broker-socket:/broker
+
+  codex:
+    build:
+      context: .
+      dockerfile: codex/Containerfile
+    image: localhost/agent-compose-broker-codex
+    depends_on:
+      - broker
+    userns_mode: "keep-id:uid=1000,gid=1000"
+    user: agent
+    environment:
+      CODEX_HOME: /home/agent/.codex
+      COMPOSE_BROKER_SOCKET: /broker/compose.sock
+    volumes:
+      - broker-socket:/broker
+      - codex-home:/home/agent/.codex
+      # Temporary compatibility for absolute paths stored in the reused docker-odoo-ready volume.
+      - codex-home:/home/odoo/.codex
+      - codex-workspace:/workspace
+      - ./ruff.toml:/workspace/ruff.toml:ro
+      - ./broker/client.py:/usr/local/bin/docker:ro
+      - ./broker/client.py:/usr/local/bin/docker-compose:ro
+      - ./broker/client.py:/usr/local/bin/podman:ro
+      - ./broker/client.py:/usr/local/bin/podman-compose:ro
+    working_dir: /workspace
+    command:
+      - /bin/sh
+      - -lc
+      # The temporarily shared docker-odoo-ready volume may have an app-server daemon active in another container.
+      - exec codex --no-daemon --ask-for-approval never --sandbox danger-full-access
+
+volumes:
+  broker-socket:
+  codex-home:
+    external: true
+    name: docker-odoo-ready_codex-home
+  codex-workspace:
+
+x-podman:
+  in_pod: false

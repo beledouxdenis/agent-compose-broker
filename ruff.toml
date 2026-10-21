@@ -1,0 +1,86 @@
+target-version = "py312"
+line-length = 120
+
+[format]
+skip-magic-trailing-comma = true
+
+[lint]
+preview = true
+external = ["OLS"]
+select = [
+    "BLE",        # flake8-blind-except
+    "C",          # flake8-comprehensions
+    "COM",        # flake8-commas
+    "E",          # pycodestyle Error
+    "EM",         # flake8-errmsg
+    "EXE",        # flake8-executable
+    "F",          # Pyflakes
+    "FA",         # flake8-future-annotations
+    "FLY",        # flynt
+    "G",          # flake8-logging-format
+    "I",          # isort
+    "ICN",        # flake8-import-conventions
+    "INT",        # flake8-gettext
+    "ISC",        # flake8-implicit-str-concat
+    "LOG",        # flake8-logging
+    "PGH",        # pygrep-hooks
+    "PIE",        # flake8-pie
+    "PLC",        # Pylint Convention
+    "PLE",        # Pylint Error
+    "PLW",        # Pylint Warning
+    "PYI",        # flake8-pyi
+    "RET",        # flake8-return
+    "RUF",        # Ruff-specific rules
+    "SIM",        # flake8-simplify
+    "SLOT",       # flake8-slots
+    "T",          # flake8-print
+    "TC",         # flake8-type-checking
+    "TID",        # flake8-tidy-imports
+    "TRY",        # tryceratops
+    "UP",         # pyupgrade
+    "W",          # pycodestyle Warning
+    "YTT",        # flake8-2020
+]
+ignore = [
+    "C408",       # unnecessary-collection-call
+    "C420",       # unnecessary-dict-comprehension-for-iterable
+    "C901",       # complex-structure
+    "COM812",     # missing-trailing-comma
+    "E266",       # multiple-leading-hashes-for-block-comment
+    "E713",       # not-in-test
+    "EM102",      # f-string-in-exception
+    "FA100",      # future-rewritable-type-annotation
+    "PGH003",     # blanket-type-ignore
+    "PIE790",     # unnecessary-placeholder
+    "PIE808",     # unnecessary-range-start
+    "PLC2701",    # import-private-name
+    "PLW0717",    # too-many-statements-in-try-clause
+    "PLW2901",    # redefined-loop-name
+    "RUF001",     # ambiguous-unicode-character-string
+    "RUF005",     # collection-literal-concatenation
+    "RUF012",     # mutable-class-default
+    "RUF067",     # non-empty-init-module
+    "RUF075",     # fallible-context-manager
+    "RUF100",     # unused-noqa
+    "RUF105",     # noqa-comments
+    "RUF201",     # rule-codes-in-selectors
+    "SIM102",     # collapsible-if
+    "SIM105",     # suppressible-exception
+    "SIM108",     # if-else-block-instead-of-if-exp
+    "SIM109",     # compare-with-tuple
+    "SIM117",     # multiple-with-statements
+    "TRY003",     # raise-vanilla-args
+    "TRY300",     # try-consider-else
+    "TRY400",     # error-instead-of-exception
+    "UP031",      # printf-string-formatting
+]
+extend-select = ["E501"]
+
+[lint.per-file-ignores]
+"**/__init__.py" = [
+    "F401",       # unused-import
+]
+
+[lint.isort]
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+split-on-trailing-comma = false
